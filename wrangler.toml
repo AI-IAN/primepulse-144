@@ -1,0 +1,47 @@
+name = "primepulse-144-scraper"
+main = "workers/amazon-scraper.js"
+compatibility_date = "2024-01-01"
+node_compat = true
+
+[env.production]
+name = "primepulse-144-scraper"
+route = "scraper.primepulse.com/*"
+zone_id = "${CLOUDFLARE_ZONE_ID}"
+
+[env.development]
+name = "primepulse-144-scraper-dev"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+MAX_CONCURRENT_REQUESTS = "10"
+REQUEST_TIMEOUT = "30000"
+RETRY_ATTEMPTS = "3"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# BRIGHTDATA_USERNAME
+# BRIGHTDATA_PASSWORD
+# BRIGHTDATA_ENDPOINT
+# API_KEY
+
+# Limits
+[limits]
+cpu_ms = 10000
+
+# Bindings
+[durable_objects]
+bindings = []
+
+[kv_namespaces]
+bindings = []
+
+# Cron triggers for periodic scraping
+[[triggers]]
+cron = "0 */2 * * *"  # Every 2 hours
+
+[build]
+command = "echo 'No build step required'"
+
+[dev]
+port = 8787
+local_protocol = "http"
