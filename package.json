@@ -1,17 +1,39 @@
 {
   "name": "primepulse-144",
   "version": "0.1.0",
-  "description": "Amazon Prime Day price monitoring system with ML-powered price drop predictions",
+  "description": "Amazon Prime Day price monitoring system with ML-powered price drop predictions and real-time Slack alerts",
   "main": "src/index.js",
+  "homepage": "https://github.com/AI-IAN/primepulse-144",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AI-IAN/primepulse-144.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AI-IAN/primepulse-144/issues"
+  },
+  "author": "PrimePulse Team",
+  "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "jest",
-    "lint": "eslint src/",
+    "dev": "nodemon src/index.js --ignore logs/ --ignore data/",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:setup": "node test-setup.js",
+    "lint": "eslint src/ workers/ --ext .js",
+    "lint:fix": "eslint src/ workers/ --ext .js --fix",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "docker:build": "docker build -t primepulse-144 .",
-    "docker:run": "docker run -p 3000:3000 primepulse-144"
+    "db:migrate": "echo 'TODO: Implement database migrations'",
+    "db:seed": "echo 'TODO: Implement database seeding'",
+    "worker:deploy": "wrangler deploy",
+    "worker:dev": "wrangler dev",
+    "docker:build": "docker build -t primepulse-144:latest .",
+    "docker:run": "docker run -p 3000:3000 --env-file .env primepulse-144:latest",
+    "docker:dev": "docker-compose up -d postgres redis && npm run dev",
+    "docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+    "logs": "docker-compose logs -f primepulse",
+    "health": "curl -f http://localhost:3000/api/health || exit 1",
+    "validate": "npm run lint && npm run test && npm run health"
   },
   "dependencies": {
     "express": "^4.18.2",
